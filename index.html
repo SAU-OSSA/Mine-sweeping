@@ -1,0 +1,77 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>扫雷</title>
+	<link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+	<style type="text/css">
+		html,
+		body {
+			height: 100%;
+			width: 100%;
+			overflow: hidden;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="body" class="container-fluid rounded border" style="padding: 0px;height: 100%;width: 100%;overflow: hidden;">
+		<div id="main_alert_display" style="position: fixed; left: 60%; z-index:999;"></div>
+		
+		<div id="talbar" class="border rounded bg-light" style="padding: 0px;">
+			<div class="btn-toolbar" role="toolbar">
+				<div class="btn-group">
+					<button type="button" class="btn btn-outline-secondary" v-on:click="Button_begin()">&nbsp;{{beginstr}}&nbsp;</button>
+					<div class="btn btn-outline-secondary disabled">点击次数：{{click_time}}</div>
+					<div class="btn btn-outline-secondary disabled">展开方块：{{openblock}}</div>
+					<div class="btn btn-outline-secondary disabled" style="width: 200px;">计时：{{gtime}}</div>
+				</div>
+			</div>
+			<form>
+				<div class="form-check form-check-inline">
+				  <label class="form-check-label">
+					<input type="checkbox" class="form-check-input" value="" v-model="model_no_wending" ><span href="#" data-toggle="tooltip" title="每一步都可能改变未被控制的地雷位置" style="font-family:STLiti">不稳定诡雷</span>
+				  </label>
+				</div>
+				<div class="form-check form-check-inline">
+				  <label class="form-check-label">
+					<input type="checkbox" class="form-check-input" value="" v-model="model_has_obstacles" ><span href="#" data-toggle="tooltip" title="地图最初会出现数个无法操作的黑色区域" style="font-family:STLiti">无法摧毁之锚</span>
+				  </label>
+				</div>
+			</form>
+		</div>
+		<div id="main" class="bg-info border" style="height: 89%; padding: 5px;">
+			<div id="mine_area" class="bg-info" style="height: 100%;padding: 0px;">
+				<li class="row border bg-white" v-for="(line,i) of screen_map" style="padding: 0px;margin: 0%;height: 5%;">
+					<div v-bind:id="'block '+i+' '+j" @click.left="Button_left_block(i,j)" @click.right="Button_right_block(i,j)" @mouseover="mouseOver(i,j)" @mouseleave="mouseLeave(i,j)" class="block col border" v-for="(block,j) of line" :style="active[i][j] + 'height:100%;padding: 0px;'">
+						<div class="bg-danger" v-if="block==-1" style="height:100%;"></div>
+						<div class="bg-primary" v-else-if="block==-2" style="height:100%;"></div>
+						<div class="bg-warning" v-else-if="block==-3" style="height:100%;"></div>
+						<div class="bg-light" v-else-if="block==0" style="height:100%;"></div>
+						<div class="bg-light" v-else-if="block>0" style="height:100%;">{{block}}</div>
+						<div class="bg-primary" v-else-if="block==-4" style="height:100%;"></div>
+						<div class="bg-dark" v-else-if="block==-5" style="height:100%;"></div>
+					</div>
+				</li>
+			</div>
+		</div>
+
+	</div>
+	
+	<script src="./js/popper.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./js/jquery-3.4.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./index_vue.js" type="text/javascript" charset="utf-8"></script>
+	<script src="./bootstrap-4.3.1-dist/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		$("#main").hide();
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();   
+		});
+		document.oncontextmenu = nocontextmenu;  
+		document.onmousedown = norightclick;   
+	</script>
+</body>
+
+</html>
